@@ -93,3 +93,43 @@ func TestIntersection(t *testing.T) {
 		})
 	}
 }
+
+func TestDistinct(t *testing.T) {
+	type TestType struct {
+		int
+		string
+	}
+
+	type args struct {
+		in []TestType
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantOut []TestType
+	}{
+		{
+			name: "base",
+			args: args{
+				in: []TestType{
+					{1, "alice"},
+					{2, "bob"},
+					{2, "bob"},
+					{2, "carol"},
+					{2, "carol"},
+					{2, "carol"},
+				},
+			},
+			wantOut: []TestType{
+				{1, "alice"},
+				{2, "bob"},
+				{2, "carol"},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equalf(t, tt.wantOut, Distinct(tt.args.in), "Distinct(%v)", tt.args.in)
+		})
+	}
+}

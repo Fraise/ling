@@ -28,3 +28,19 @@ func Intersection[T comparable](in1 []T, in2 []T) (out []T) {
 
 	return out
 }
+
+// Distinct returns the slice with the duplicates removed.
+func Distinct[T comparable](in []T) (out []T) {
+	out = make([]T, 0)
+	inMap := make(map[T]bool, len(in))
+
+	for _, v := range in {
+		inMap[v] = true
+	}
+
+	for k := range inMap {
+		out = append(out, k)
+	}
+
+	return out
+}
