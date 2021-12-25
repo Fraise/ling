@@ -11,9 +11,9 @@ func Map[T1, T2 any](in []T1, fn func(T1) T2) (out []T2) {
 	return out
 }
 
-// AggregateToSlice groups together elements the key K returned by the predicate and return them as a slice of slices.
-func AggregateToSlice[T any, K comparable](in []T, fn func(T) (K, T)) (out [][]T) {
-	aggregate := Aggregate(in, fn)
+// Aggregate groups together elements the key K returned by the predicate and return them as a slice of slices.
+func Aggregate[T any, K comparable](in []T, fn func(T) (K, T)) (out [][]T) {
+	aggregate := AggregateToMap(in, fn)
 
 	out = make([][]T, 0, len(aggregate))
 
@@ -24,8 +24,8 @@ func AggregateToSlice[T any, K comparable](in []T, fn func(T) (K, T)) (out [][]T
 	return out
 }
 
-// Aggregate groups together elements in a map by the key K returned by the predicate.
-func Aggregate[T any, K comparable](in []T, fn func(T) (K, T)) (out map[K][]T) {
+// AggregateToMap groups together elements in a map by the key K returned by the predicate.
+func AggregateToMap[T any, K comparable](in []T, fn func(T) (K, T)) (out map[K][]T) {
 	out = make(map[K][]T)
 
 	for _, v := range in {

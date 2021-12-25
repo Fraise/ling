@@ -80,7 +80,7 @@ func TestAggregateToSlice(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			gotOut := AggregateToSlice(tt.args.in, tt.args.fn)
+			gotOut := Aggregate(tt.args.in, tt.args.fn)
 			assert.Equal(t, tt.wantOut, gotOut)
 		})
 	}
@@ -121,7 +121,7 @@ func TestAggregate(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equalf(t, tt.wantOut, Aggregate(tt.args.in, tt.args.fn), "Aggregate(%v, %v)", tt.args.in, tt.args.fn)
+			assert.Equalf(t, tt.wantOut, AggregateToMap(tt.args.in, tt.args.fn), "AggregateToMap(%v, %v)", tt.args.in, tt.args.fn)
 		})
 	}
 }
