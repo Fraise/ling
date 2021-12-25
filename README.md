@@ -3,6 +3,8 @@
 ling is a functional programming style library which aims to simplify data processing in Go. It requires Go 1.18 at
 minimum as is uses generics to allow manipulating any data.
 
+**Suggestions and PRs on methods to add are welcome!**
+
 ## Chainable methods
 
 Some methods can be chained together through the use of the `SliceChainer`. This type is a wrapper of `[]T` and allows
