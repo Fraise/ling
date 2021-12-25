@@ -11,13 +11,13 @@ func TestSliceChainer_Filter(t *testing.T) {
 	}
 	tests := []struct {
 		name    string
-		chainer *SliceChainer[int]
+		chainer SliceChainer[int]
 		args    args
-		want    *SliceChainer[int]
+		want    SliceChainer[int]
 	}{
 		{
 			name: "base",
-			chainer: &SliceChainer[int]{
+			chainer: SliceChainer[int]{
 				1, 2, 3, 4, 5,
 			},
 			args: args{
@@ -25,7 +25,7 @@ func TestSliceChainer_Filter(t *testing.T) {
 					return i > 3
 				},
 			},
-			want: &SliceChainer[int]{
+			want: SliceChainer[int]{
 				4, 5,
 			},
 		},
