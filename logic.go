@@ -1,5 +1,7 @@
 package ling
 
+import "errors"
+
 // Contains returns true if the slice contains the value.
 func Contains[T comparable](in []T, val T) bool {
 	for _, v := range in {
@@ -43,4 +45,28 @@ func Distinct[T comparable](in []T) (out []T) {
 	}
 
 	return out
+}
+
+// First returns the first element satisfying the predicate, or the default value of T and an error otherwise.
+func First[T any](in []T, fn func(T) bool) (T, error) {
+	for _, v := range in {
+		if fn(v) {
+			return v, nil
+		}
+	}
+
+	var noVal T
+
+	return noVal, errors.New("value not found")
+}
+
+// FirstOr returns the first element satisfying the predicate, or the passed default value otherwise.
+func FirstOr[T any](in []T, fn func(T) bool, defaultVal T) T {
+	for _, v := range in {
+		if fn(v) {
+			return v
+		}
+	}
+
+	return defaultVal
 }

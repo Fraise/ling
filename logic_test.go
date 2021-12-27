@@ -133,3 +133,118 @@ func TestDistinct(t *testing.T) {
 		})
 	}
 }
+
+func TestFirst(t *testing.T) {
+	type TestType struct {
+		int
+		string
+	}
+
+	type args struct {
+		in []TestType
+		fn func(testType TestType) bool
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    TestType
+		wantErr bool
+	}{
+		{
+			name: "base",
+			args: args{
+				in: []TestType{
+					{1, "alice"},
+					{2, "bob"},
+					{3, "bob"},
+					{2, "carol"},
+				},
+				fn: func(testType TestType) bool {
+					return testType.string == "bob"
+				},
+			},
+			want:    TestType{2, "bob"},
+			wantErr: false,
+		},
+		{
+			name: "base_error",
+			args: args{
+				in: []TestType{
+					{1, "alice"},
+					{2, "bob"},
+					{3, "bob"},
+					{2, "carol"},
+				},
+				fn: func(testType TestType) bool {
+					return testType.string == "eve"
+				},
+			},
+			want:    TestType{},
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := First(tt.args.in, tt.args.fn)
+
+			assert.Equal(t, err != nil, tt.wantErr)
+			assert.Equalf(t, tt.want, got, "First(%v, %v)", tt.args.in, tt.args.fn)
+		})
+	}
+}
+
+func TestFirstOr(t *testing.T) {
+	type TestType struct {
+		int
+		string
+	}
+
+	type args struct {
+		in         []TestType
+		fn         func(testType TestType) bool
+		defaultVal TestType
+	}
+	tests := []struct {
+		name string
+		args args
+		want TestType
+	}{
+		{
+			name: "base",
+			args: args{
+				in: []TestType{
+					{1, "alice"},
+					{2, "bob"},
+					{3, "bob"},
+					{2, "carol"},
+				},
+				fn: func(testType TestType) bool {
+					return testType.string == "bob"
+				},
+				defaultVal: TestType{-1, "default"},
+			},
+			want: TestType{2, "bob"},
+		},
+		{
+			name: "base_default",
+			args: args{
+				in: []TestType{
+					{1, "alice"},
+					{2, "bob"},
+					{3, "bob"},
+					{2, "carol"},
+				},
+				fn: func(testType TestType) bool {
+					return testType.string == "eve"
+				},
+				defaultVal: TestType{-1, "default"},
+			},
+			want: TestType{-1, "default"},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equalf(t, tt.want, FirstOr(tt.args.in, tt.args.fn, tt.args.defaultVal), "FirstOr(%v, %v, %v)", tt.args.in, tt.args.fn, tt.args.defaultVal)
+		})
+	}
+}
