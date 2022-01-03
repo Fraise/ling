@@ -2,15 +2,15 @@ package ling
 
 import "sync"
 
-// ParallelFilter removes the elements from the slice when the predicate is false using multiple goroutines.
-// This function does not keep the ordering of the input slice.
+// ParallelMap maps all the elements of the slice into another slice. It does not preserve the order of the initial
+// slice.
 //
-// This function is much slower than Filter (~ 10 times) for simple filter operations. It should only be used when the
-// filter operation is slow (IO...).
-func ParallelFilter[T any](in []T, fn func(T) bool) []T {
-	slice := make([]T, 0)
+// This function is much slower than Map for simple filter operations. It should only be used when the
+// mapping operation is slow (IO...).
+func ParallelMap[T1, T2 any](in []T1, fn func(T1) T2) []T2 {
+	slice := make([]T2, 0)
 	chunkSize := getChunkSize(len(in))
-	receiver := make(chan T, 1000)
+	receiver := make(chan T2, 1000)
 	done := make(chan bool)
 	var wg sync.WaitGroup
 
@@ -33,9 +33,7 @@ func ParallelFilter[T any](in []T, fn func(T) bool) []T {
 			}
 
 			for _, element := range in[iVal:end] {
-				if fn(element) {
-					receiver <- element
-				}
+				receiver <- fn(element)
 			}
 		}(i)
 	}
